@@ -16,11 +16,15 @@ const router = express.Router();
  *      requestBody: accepts userId and data object containing (name, note, estimate)
  */
 router.post("/", validate(createProjectSchema), async function(req: Request, res: Response, next: NextFunction) {
-    const { userId, data } = req.body;
-    const clockifyProject = await ClockifyProject.create(data);
-    await Project.create(userId, clockifyProject.id);
-
-    return res.status(201).json({clockifyProject});
+    try{
+        const { userId, data } = req.body;
+        const clockifyProject = await ClockifyProject.create(data);
+        await Project.create(userId, clockifyProject.id);
+    
+        return res.status(201).json({clockifyProject});
+    }catch(err){
+        return next(err);
+    }
 })  
 
 /**Find all projects
@@ -88,13 +92,18 @@ router.delete("/:projectId", async function(req: Request, res: Response, next: N
  * 
 */
 router.post("/:projectId/tasks", validate(createTaskSchema), async function(req: Request, res: Response, next: NextFunction) {
-    const { userId, data } = req.body;
-    const { projectId } = req.params;
-
-    const clockifyTask = await ClockifyTask.create(projectId, data);
-    await Task.create(userId, clockifyTask.id);
-
-    return res.json({clockifyTask});
+    try{
+        const { userId, data } = req.body;
+        const { projectId } = req.params;
+    
+        const clockifyTask = await ClockifyTask.create(projectId, data);
+        await Task.create(userId, clockifyTask.id);
+    
+        return res.json({clockifyTask});
+    } catch (err: any) {
+        console.error(err);
+        return next(err);
+    }
 })
 
 /**

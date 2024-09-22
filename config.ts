@@ -1,6 +1,8 @@
 /** Shared config for application; can be required many places */
 
-require("dotenv").config();
+import * as dotenv from 'dotenv'
+dotenv.config({path: __dirname + '/.env'})
+
 import colors from "colors";
 
 const SECRET_KEY = process.env.SECRET_KEY || 'secret-dev';

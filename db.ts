@@ -1,5 +1,4 @@
 "use strict"
-import { get } from "http";
 /** Database setup for Productivity Buddy */
 import { Client } from "pg";
 import { getDatabaseUri } from "./config";

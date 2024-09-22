@@ -16,4 +16,16 @@ interface ISurvey {
     description?: string;
 }
 
-export type { IUser, ISurvey };
+interface ITaskData {
+    name: string;
+    status?: string;
+    estimate?: string;
+}
+
+interface IProjectData {
+    name: string; 
+    note?: string;
+    archived?: boolean;
+}
+
+export type { IUser, ISurvey, ITaskData, IProjectData };

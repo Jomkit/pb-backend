@@ -1,6 +1,7 @@
 /** model for functions related to clockify task api calls */
 import axios, { AxiosError } from "axios";
 import dotenv from "dotenv";
+import { ITaskData } from "../../types";
 dotenv.config();
 
 
@@ -36,9 +37,14 @@ export default class ClockifyTask {
      * @param {string} data.status - (optional) The status of the task
      * @param {string} data.estimate - (optional) Estimate, follows ISO-8601 format
      */
-    static async create(clockifyProjectId: string, data: object) {
-        const result = await this.request(`workspaces/${this.workspaceId}/projects/${clockifyProjectId}/tasks`, "post", data);
-        return result;
+    static async create(clockifyProjectId: string, data: ITaskData) {
+        try{
+            const result = await this.request(`workspaces/${this.workspaceId}/projects/${clockifyProjectId}/tasks`, "post", data);
+            return result;
+        } catch (err: any) {
+            console.error(err);
+            return err;
+        }
     }
     
     /** 
@@ -69,7 +75,7 @@ export default class ClockifyTask {
      * @param {string} data.estimate - (optional) Estimate, follows ISO-8601 format
      * @returns {Promise<any>} The updated task
      */
-    static async update(clockifyProjectId: string, taskId: string, data: object) {
+    static async update(clockifyProjectId: string, taskId: string, data: ITaskData) {
         const result = await this.request(`workspaces/${this.workspaceId}/projects/${clockifyProjectId}/tasks/${taskId}`, "put", data);
         return result;
     }

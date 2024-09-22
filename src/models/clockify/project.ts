@@ -1,6 +1,7 @@
 /** model for functions related to clockify project api calls */
 import axios, { AxiosError } from "axios";
 import dotenv from "dotenv";
+import { IProjectData } from "../../types";
 dotenv.config();
 
 
@@ -34,14 +35,18 @@ export default class ClockifyProject {
      * @param {string} data.note - Notes, or description of project
      * @param {string} data.estimate - Optional, object, follows ISO-8601 format
      */
-    static async create(data: Object) {
-        const result = await this.request(
-            `workspaces/${this.workspaceId}/projects`,
-            "post",
-            data
-        );
-        
-        return result;
+    static async create(data: IProjectData) {
+        try{
+            const result = await this.request(
+                `workspaces/${this.workspaceId}/projects`,
+                "post",
+                data
+            );
+            return result;
+        } catch (err: any) {
+            console.error(err);
+            return err;
+        }
     }
     
     /**

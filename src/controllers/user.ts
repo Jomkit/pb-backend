@@ -38,11 +38,15 @@ router.get("/:userId", async function(req: Request, res: Response, next: NextFun
  *      summary: creates a project in clockify
  */
 router.post("/:userId/projects", async function(req: Request, res: Response, next: NextFunction) {
-    const userId = parseInt(req.params.userId);
-    const { name, note } = req.body;
-    const clockifyProject = await ClockifyProject.create({name: name, note: note});
-    await Project.create(userId, clockifyProject.id);
-    return res.status(201).json({clockifyProject});
+    try{
+        const userId = parseInt(req.params.userId);
+        const { name, note } = req.body;
+        const clockifyProject = await ClockifyProject.create({name: name, note: note});
+        await Project.create(userId, clockifyProject.id);
+        return res.status(201).json({clockifyProject});
+    }catch(err: any){
+        return next(err);
+    }
 })
 
 /**
