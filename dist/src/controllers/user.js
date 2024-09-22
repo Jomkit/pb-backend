@@ -54,11 +54,16 @@ router.get("/:userId", function (req, res, next) {
  */
 router.post("/:userId/projects", function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const userId = parseInt(req.params.userId);
-        const { name, note } = req.body;
-        const clockifyProject = yield project_1.default.create({ name: name, note: note });
-        yield project_2.default.create(userId, clockifyProject.id);
-        return res.status(201).json({ clockifyProject });
+        try {
+            const userId = parseInt(req.params.userId);
+            const { name, note } = req.body;
+            const clockifyProject = yield project_1.default.create({ name: name, note: note });
+            yield project_2.default.create(userId, clockifyProject.id);
+            return res.status(201).json({ clockifyProject });
+        }
+        catch (err) {
+            return next(err);
+        }
     });
 });
 /**

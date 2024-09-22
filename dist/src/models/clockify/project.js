@@ -68,8 +68,14 @@ class ClockifyProject {
      */
     static create(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.request(`workspaces/${this.workspaceId}/projects`, "post", data);
-            return result;
+            try {
+                const result = yield this.request(`workspaces/${this.workspaceId}/projects`, "post", data);
+                return result;
+            }
+            catch (err) {
+                console.error(err);
+                return err;
+            }
         });
     }
     /**

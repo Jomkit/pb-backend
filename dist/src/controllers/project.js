@@ -29,10 +29,15 @@ const router = express_1.default.Router();
  */
 router.post("/", (0, inputValidation_1.default)(projectSchemas_1.createProjectSchema), function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { userId, data } = req.body;
-        const clockifyProject = yield project_2.default.create(data);
-        yield project_1.default.create(userId, clockifyProject.id);
-        return res.status(201).json({ clockifyProject });
+        try {
+            const { userId, data } = req.body;
+            const clockifyProject = yield project_2.default.create(data);
+            yield project_1.default.create(userId, clockifyProject.id);
+            return res.status(201).json({ clockifyProject });
+        }
+        catch (err) {
+            return next(err);
+        }
     });
 });
 /**Find all projects
@@ -102,11 +107,17 @@ router.delete("/:projectId", function (req, res, next) {
 */
 router.post("/:projectId/tasks", (0, inputValidation_1.default)(taskSchemas_1.createTaskSchema), function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { userId, data } = req.body;
-        const { projectId } = req.params;
-        const clockifyTask = yield task_1.default.create(projectId, data);
-        yield task_2.default.create(userId, clockifyTask.id);
-        return res.json({ clockifyTask });
+        try {
+            const { userId, data } = req.body;
+            const { projectId } = req.params;
+            const clockifyTask = yield task_1.default.create(projectId, data);
+            yield task_2.default.create(userId, clockifyTask.id);
+            return res.json({ clockifyTask });
+        }
+        catch (err) {
+            console.error(err);
+            return next(err);
+        }
     });
 });
 /**
